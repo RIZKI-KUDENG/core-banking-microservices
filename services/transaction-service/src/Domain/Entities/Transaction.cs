@@ -5,7 +5,7 @@ using Domain.Common;
 
 public class Transaction : BaseEntity
 {
-    public string ReferenceNumber { get; set; } = string.Empty;
+    public Guid ReferenceNumber { get; set; } 
     public TransactionType Type { get; set; }
     public TransactionStatus Status { get; set; }
     public string? Description { get; set; }

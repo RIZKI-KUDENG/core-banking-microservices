@@ -1,7 +1,11 @@
-
+using Domain.Entities;
 namespace Application.DTOs.Transaction;
 
 public class CreateTransactionRequest
 {
-    public string ReferenceNumber {get; set;} = string.Empty;
+    public long SourceAccountId {get; set;}
+    public long? DestinationAccountId {get; set;}
+    public decimal Amount {get; set;}
+    public TransactionType Type {get; set;}
+    public string? Description {get; set;}
 }
