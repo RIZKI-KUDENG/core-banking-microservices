@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces;
+using Infrastructure.Repositories;
 
 
 namespace Infrastructure;
@@ -14,6 +16,8 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options => 
         options.UseNpgsql(connectionString)
         );
+
+
 
         return services;
 
