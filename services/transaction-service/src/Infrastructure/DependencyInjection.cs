@@ -17,7 +17,7 @@ public static class DependencyInjection
         options.UseNpgsql(connectionString)
         );
 
-
+        services.AddScoped<ITransactionRepository, TransactionRepository>();
 
         return services;
 
