@@ -3,6 +3,8 @@ using Domain.Entities;
 using Application.Interfaces;
 using Application.DTOs.Transaction;
 
+namespace Application.UseCase.Transactions.Commands.CreateTransaction;
+
 public record CreateTransactionCommand : IRequest<CreateTransactionResponse>
 {
     public long SourceAccountId {get; set;}
