@@ -6,7 +6,7 @@ using FluentValidation;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/controller")]
+[Route("api/[controller]")]
 public class TransactionsController : ControllerBase
 {
     private readonly IMediator _mediator;
