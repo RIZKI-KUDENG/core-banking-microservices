@@ -21,13 +21,11 @@ public class TransactionRepository : ITransactionRepository
 
     public async Task<Transaction?> GetByIdAsync(long id)
     {
-        return await _context.Transactions.FindAsync(id);
+        return await _context.Transactions.Include(t => t.Entries).FirstOrDefaultAsync(t => t.Id == id);
     }
 
     public async Task<Transaction?> GetReferenceNumberAsync(string referenceNumber)
     {
-        // Karena properti ReferenceNumber di entitas Transaction menggunakan tipe Guid,
-        // kita perlu melakukan parsing dari string ke Guid terlebih dahulu
         if (Guid.TryParse(referenceNumber, out Guid guidRef))
         {
             return await _context.Transactions
