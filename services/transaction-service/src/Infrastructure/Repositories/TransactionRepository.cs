@@ -29,6 +29,7 @@ public class TransactionRepository : ITransactionRepository
         if (Guid.TryParse(referenceNumber, out Guid guidRef))
         {
             return await _context.Transactions
+                .Include(t => t.Entries)
                 .FirstOrDefaultAsync(t => t.ReferenceNumber == guidRef);
         }
         
