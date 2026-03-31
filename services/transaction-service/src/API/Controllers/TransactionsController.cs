@@ -1,6 +1,7 @@
 using MediatR;
 using Application.UseCase.Transactions.Commands.CreateTransaction;
 using Application.UseCase.Transactions.Queries.GetTransactionId;
+using Application.UseCase.Transactions.Commands.Queries.GetReferenceNumber;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 
@@ -45,6 +46,24 @@ public class TransactionsController : ControllerBase
             var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
             return BadRequest(new { Message = "Validasi gagal", Errors = errors });
         }catch (Exception ex) when (ex.Message == "Transaction not found")
+        {
+            return NotFound(new { Message = ex.Message });
+        }
+    }
+    [HttpGet("reference/{referenceNumber}")]
+    public async Task<IActionResult> GetReferenceNumber(string referenceNumber)
+    {
+        try
+        {
+            var result = await _mediator.Send(new GetReferenceNumberQuery(referenceNumber));
+            return Ok(result);
+        }
+        catch (ValidationException ex)
+        {
+            var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+            return BadRequest(new { Message = "Reference number is required", Errors = errors });
+        }
+        catch (Exception ex) when (ex.Message == "Transaction not found")
         {
             return NotFound(new { Message = ex.Message });
         }
