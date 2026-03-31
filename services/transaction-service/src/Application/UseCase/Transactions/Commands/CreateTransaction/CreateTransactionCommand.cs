@@ -10,7 +10,7 @@ public record CreateTransactionCommand : IRequest<CreateTransactionResponse>
     public long SourceAccountId {get; set;}
     public long? DestinationAccountId {get; set;}
     public decimal Amount {get; set;}
-    public TransactionType TransactionType {get; set;}
+    public TransactionType Type {get; set;}
     public string? Description {get; set;}
 }
 
@@ -27,7 +27,7 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
         var transaction = new Transaction
         {
             ReferenceNumber = Guid.NewGuid(),
-            Type = request.TransactionType,
+            Type = request.Type,
             Status = TransactionStatus.Pending,
             Description = request.Description,
             CreatedAt = DateTime.UtcNow,
@@ -55,6 +55,7 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
         {
             ReferenceNumber = transaction.ReferenceNumber,
             Status = transaction.Status,
+            Type = transaction.Type,
             Amount = request.Amount,
             CreatedAt = transaction.CreatedAt
         };
