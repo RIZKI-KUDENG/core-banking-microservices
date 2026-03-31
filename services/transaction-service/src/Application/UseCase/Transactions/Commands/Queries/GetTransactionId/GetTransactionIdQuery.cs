@@ -2,6 +2,7 @@ using MediatR;
 using Application.Interfaces;
 using Application.DTOs.Transaction;
 using Domain.Entities;
+using Application.Common.Exceptions;
 
 namespace Application.UseCase.Transactions.Queries.GetTransactionId;
 
@@ -19,14 +20,14 @@ public class GetTransactionIdQueryHandler : IRequestHandler<GetTransactionIdQuer
     public async Task<GetTransactionIdResponse> Handle(GetTransactionIdQuery request, CancellationToken cancellationToken)
     {
         var transaction = await _transactionRepository.GetByIdAsync(request.Id);
-        if(transaction == null) 
+        if(transaction == null)
         {
-            throw new Exception("Transaction not found");
+            throw new NotFoundException($"Transaction id with {request.Id} not found");
         }
         return new GetTransactionIdResponse
         {
-            Amount = transaction.Entries.FirstOrDefault()?.Amount ?? 0,
-            Status = transaction.Status,
+            Amount = transaction?.Entries.FirstOrDefault()?.Amount ?? 0,
+            Status = transaction!.Status,
             Type = transaction.Type,
             Description = transaction.Description,
             CreatedAt = transaction.CreatedAt

@@ -1,6 +1,7 @@
 using MediatR;
 using Application.DTOs.Transaction;
 using Application.Interfaces;
+using Application.Common.Exceptions;
 
 
 namespace Application.UseCase.Transactions.Commands.Queries.GetReferenceNumber;
@@ -22,7 +23,7 @@ public class GetReferenceNumberQueryHandler : IRequestHandler<GetReferenceNumber
 
         if(transaction == null) 
         {
-            throw new Exception("Transaction not found");
+            throw new NotFoundException($"Transaction with reference {request.ReferenceNumber} not found");
         }
         return new GetReferenceNumberResponse
         {

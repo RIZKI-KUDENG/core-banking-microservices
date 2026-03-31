@@ -21,51 +21,19 @@ public class TransactionsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionCommand command)
     {
-        try
-        {
             var result = await _mediator.Send(command);
             return Ok(result);
-        }
-        catch(ValidationException ex)
-        {
-            var errors = ex.Errors.Select(e => new {e.PropertyName, e.ErrorMessage});
-            return BadRequest(new { Message = "Validasi gagal", Errors = errors });
-        }
     }
     [HttpGet("{id:long}")]
     public async Task<IActionResult> GetTransactionId(long id)
     {
-        try
-        {
             var result = await _mediator.Send(new GetTransactionIdQuery(id));
             return Ok(result);
-        }
-        catch
-        (ValidationException ex)
-        {
-            var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
-            return BadRequest(new { Message = "Validasi gagal", Errors = errors });
-        }catch (Exception ex) when (ex.Message == "Transaction not found")
-        {
-            return NotFound(new { Message = ex.Message });
-        }
     }
     [HttpGet("reference/{referenceNumber}")]
     public async Task<IActionResult> GetReferenceNumber(string referenceNumber)
     {
-        try
-        {
             var result = await _mediator.Send(new GetReferenceNumberQuery(referenceNumber));
             return Ok(result);
-        }
-        catch (ValidationException ex)
-        {
-            var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
-            return BadRequest(new { Message = "Reference number is required", Errors = errors });
-        }
-        catch (Exception ex) when (ex.Message == "Transaction not found")
-        {
-            return NotFound(new { Message = ex.Message });
-        }
     }
 }
