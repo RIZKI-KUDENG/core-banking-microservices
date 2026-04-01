@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Xunit.Abstractions;
 using System.Text.Json;
 using Application.DTOs.Transaction;
+using Application.Common.Exceptions;
 
 namespace UnitTests;
 
@@ -59,18 +60,12 @@ public class GetIdTransactionTest
         long transactionId = 999;
 
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetTransactionIdQuery>(), It.IsAny<CancellationToken>()))
-        .ThrowsAsync(new Exception("Transaction not found"));
+        .ThrowsAsync(new NotFoundException("Transaction not found"));
 
-        // Act 
-        var result = await _controller.GetTransactionId(transactionId);
-
-        // Assert
-        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _controller.GetTransactionId(transactionId));
+        Assert.Equal("Transaction not found", exception.Message);
         
-        var value = notFoundResult.Value;
-        Assert.NotNull(value);
-        var messageProperty = value.GetType().GetProperty("Message")?.GetValue(value, null);
-        Assert.Equal("Transaction not found", messageProperty);
     }
     [Fact]
     public async Task GetTransactionId_WithValidationException_ReturnsBadRequest()
@@ -84,13 +79,10 @@ public class GetIdTransactionTest
         };
 
         _mediatorMock.Setup(m => m.Send(It.IsAny<GetTransactionIdQuery>(), It.IsAny<CancellationToken>()))
-        .ThrowsAsync(new ValidationException("Id must be greater than 0"));
+        .ThrowsAsync(new ValidationException(validationFailure));
 
-        // Act
-        var result = await _controller.GetTransactionId(transactionId);
-
-        // Assert 
-        var badRequest = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.NotNull(badRequest.Value);
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ValidationException>(() => _controller.GetTransactionId(transactionId));
+        Assert.Contains(exception.Errors, e => e.PropertyName == "Id");
     }
 }

@@ -40,7 +40,7 @@ public class GetReferenceNumberTest
             Description = "Deposit",
             CreatedAt = DateTime.UtcNow,
         };
-        _mediatorMock.Setup(m => m.Send(It.IsAny<GetIdTransactionTest>(), It.IsAny<CancellationToken>()))
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetReferenceNumberQuery>(), It.IsAny<CancellationToken>()))
         .ReturnsAsync(query);
 
         // Act

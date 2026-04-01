@@ -74,11 +74,8 @@ public class CreateTransactionTests
         _mediatorMock.Setup(m => m.Send(It.IsAny<CreateTransactionCommand>(), It.IsAny<CancellationToken>()))
         .ThrowsAsync(new ValidationException(validationFailure));
 
-        // act
-        var result = await _controller.CreateTransaction(command);
-
-        //assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-       Assert.NotNull(badRequestResult.Value);
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ValidationException>(() => _controller.CreateTransaction(command));
+        Assert.NotEmpty(exception.Errors);
     }
 }
