@@ -33,7 +33,7 @@ public class CreateTransactionTests
         {
             SourceAccountId = 1,
             Amount = 50000,
-            TransactionType = Domain.Entities.TransactionType.Deposit,
+            Type = Domain.Entities.TransactionType.Deposit,
         };
         var expectedResponse = new CreateTransactionResponse
         {

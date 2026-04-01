@@ -1,4 +1,4 @@
-using Application.UseCase.Transactions.Commands.Queries.GetReferenceNumber;
+using Application.UseCase.Transactions.Queries.GetReferenceNumber;
 using FluentValidation;
 
 namespace Application.UseCase.Transactions.Queries.GetReferenceNumber;

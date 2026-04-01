@@ -4,7 +4,7 @@ using Application.Interfaces;
 using Application.Common.Exceptions;
 
 
-namespace Application.UseCase.Transactions.Commands.Queries.GetReferenceNumber;
+namespace Application.UseCase.Transactions.Queries.GetReferenceNumber;
 
 public record GetReferenceNumberQuery(string ReferenceNumber) : IRequest<GetReferenceNumberResponse>;
 

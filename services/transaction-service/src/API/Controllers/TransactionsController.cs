@@ -1,7 +1,7 @@
 using MediatR;
 using Application.UseCase.Transactions.Commands.CreateTransaction;
 using Application.UseCase.Transactions.Queries.GetTransactionId;
-using Application.UseCase.Transactions.Commands.Queries.GetReferenceNumber;
+using Application.UseCase.Transactions.Queries.GetReferenceNumber;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 
