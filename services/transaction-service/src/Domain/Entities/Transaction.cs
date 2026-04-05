@@ -54,7 +54,6 @@ public class Transaction : AggregateRoot
         UpdatedAt = DateTime.UtcNow;
 
         AddDomainEvent(new TransactionCreatedEvent(
-            Id == 0 ? Guid.NewGuid() : Guid.NewGuid(), 
             ReferenceNumber,
             totalDebit,
             Type.ToString()
