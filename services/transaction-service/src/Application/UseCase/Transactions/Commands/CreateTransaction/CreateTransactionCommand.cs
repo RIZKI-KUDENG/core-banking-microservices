@@ -2,6 +2,8 @@ using MediatR;
 using Domain.Entities;
 using Application.Interfaces;
 using Application.DTOs.Transaction;
+using Domain.ValueObjects;
+using FluentValidation;
 
 namespace Application.UseCase.Transactions.Commands.CreateTransaction;
 
@@ -24,40 +26,7 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
     }
     public async Task<CreateTransactionResponse> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
     {
-        var transaction = new Transaction
-        {
-            ReferenceNumber = Guid.NewGuid(),
-            Type = request.Type,
-            Status = TransactionStatus.Pending,
-            Description = request.Description,
-            CreatedAt = DateTime.UtcNow,
-        };
-        transaction.Entries.Add(new TransactionEntry
-        {
-            AccountId = request.SourceAccountId,
-            Type = EntryType.Debit,
-            Amount = request.Amount,
-            CreatedAt = DateTime.UtcNow,
-        });
-        if (request.DestinationAccountId.HasValue)
-        {
-            transaction.Entries.Add(new TransactionEntry
-            {
-                AccountId = request.DestinationAccountId.Value,
-                Type = EntryType.Credit,
-                Amount = request.Amount,
-                CreatedAt = DateTime.UtcNow,
-            });
-        }
-        await _transactionRepository.AddAsync(transaction);
-        await _transactionRepository.SaveChangesAsync();
-        return new CreateTransactionResponse
-        {
-            ReferenceNumber = transaction.ReferenceNumber,
-            Status = transaction.Status,
-            Type = transaction.Type,
-            Amount = request.Amount,
-            CreatedAt = transaction.CreatedAt
-        };
+      var moneyResult = Money.Create(request.Amount);
+      if(moneyResult.IsFailure) throw new ValidationException(moneyResult.Error);
     }
 }
