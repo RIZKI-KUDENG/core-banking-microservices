@@ -28,7 +28,7 @@ public class GetReferenceNumberQueryHandler : IRequestHandler<GetReferenceNumber
         return new GetReferenceNumberResponse
         {
             ReferenceNumber = transaction?.ReferenceNumber ?? Guid.Empty,
-            Amount = transaction?.Entries.FirstOrDefault()?.Amount ?? 0,
+            Amount = transaction?.Entries.FirstOrDefault()?.Amount.Value ?? 0m,
             Status = transaction?.Status ?? Domain.Entities.TransactionStatus.Failed, 
             Type = transaction?.Type ?? Domain.Entities.TransactionType.Deposit,
             Description = transaction?.Description,

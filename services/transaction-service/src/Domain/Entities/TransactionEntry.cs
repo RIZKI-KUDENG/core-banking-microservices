@@ -9,7 +9,7 @@ public class TransactionEntry : BaseEntity
     public long TransactionId {get; private set;}
     public long AccountId {get; private set;}
     public EntryType Type {get; private set;}
-    public Money Amount {get; private set;}
+    public Money Amount {get; private set;} = null!;
 
     private TransactionEntry() {}
 

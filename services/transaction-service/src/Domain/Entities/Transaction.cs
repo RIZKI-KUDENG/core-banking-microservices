@@ -50,7 +50,7 @@ public class Transaction : AggregateRoot
         if(Type == TransactionType.Transfer && totalDebit != totalCredit)
         return Result.Failure("For transfer transactions, total debit must equal total credit.");
 
-        Status = TransactionStatus.Processed;
+        Status = TransactionStatus.Completed;
         UpdatedAt = DateTime.UtcNow;
 
         AddDomainEvent(new TransactionCreatedEvent(
@@ -73,6 +73,6 @@ public enum TransactionType
 public enum TransactionStatus
 {
     Pending,
-    Processed,
+    Completed,
     Failed
 }

@@ -26,7 +26,7 @@ public class GetTransactionIdQueryHandler : IRequestHandler<GetTransactionIdQuer
         }
         return new GetTransactionIdResponse
         {
-            Amount = transaction?.Entries.FirstOrDefault()?.Amount ?? 0,
+            Amount = transaction?.Entries.FirstOrDefault()?.Amount.Value ?? 0m,
             Status = transaction!.Status,
             Type = transaction.Type,
             Description = transaction.Description,
