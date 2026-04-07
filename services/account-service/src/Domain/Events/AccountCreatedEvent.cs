@@ -3,6 +3,6 @@ using Domain.Common;
 namespace Domain.Events;
 
 public record AccountCreatedEvent(
-    Guid AccountId,
+    long CustomerId,
     string AccountNumber,
     decimal InitialBalance) : DomainEvent;
