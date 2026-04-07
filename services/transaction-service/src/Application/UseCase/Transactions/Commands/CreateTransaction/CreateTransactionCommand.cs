@@ -29,18 +29,18 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
       var moneyResult = Money.Create(request.Amount);
         if (moneyResult.IsFailure)
         {
-            // Karena arsitektur Anda memakai exception middleware, kita lempar exception
+
             throw new ValidationException(moneyResult.Error); 
         }
 
-        // 2. Buat Entitas melalui Factory Method
+
         var transactionResult = Transaction.Create(request.Type, request.Description);
         if (transactionResult.IsFailure)
             throw new InvalidOperationException(transactionResult.Error);
 
         var transaction = transactionResult.Value!;
 
-        // 3. Tambahkan Entri
+
         var debitResult = transaction.AddEntry(request.SourceAccountId, EntryType.Debit, moneyResult.Value!);
         if (debitResult.IsFailure) throw new InvalidOperationException(debitResult.Error);
 
@@ -50,21 +50,21 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
             if (creditResult.IsFailure) throw new InvalidOperationException(creditResult.Error);
         }
 
-        // 4. Jalankan Business Logic Utama
+
         var processResult = transaction.Process();
         if (processResult.IsFailure) throw new InvalidOperationException(processResult.Error);
 
-        // 5. Simpan (Domain Event akan tertahan di memori entitas ini)
+
         await _transactionRepository.AddAsync(transaction);
         await _transactionRepository.SaveChangesAsync();
 
-        // 6. Mapping kembali ke primitive DTO untuk respons
+
         return new CreateTransactionResponse
         {
             ReferenceNumber = transaction.ReferenceNumber,
             Status = transaction.Status,
             Type = transaction.Type,
-            Amount = request.Amount, // Kembalikan nilai primitive
+            Amount = request.Amount, 
             CreatedAt = transaction.CreatedAt
         };
     }

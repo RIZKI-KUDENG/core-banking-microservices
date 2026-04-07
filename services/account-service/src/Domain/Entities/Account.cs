@@ -8,25 +8,25 @@ public class Account : AggregateRoot
     public string AccountNumber { get; private set; } = null!;
     public decimal Balance { get; private set; }
     public AccountType Type { get; private set; }
-    public Status AccountStatus { get; private set; }
+    public AccountStatus Status { get; private set; }
     public byte[] RowVersion { get; private set; } = null!;
 
     private Account() {}
 
-    public static Result<Account> Create(long customerId, string accountNumber, AccountType type)
+    public static Result<Account> Create(long customerId, decimal Balance, AccountType type)
     {
         var account = new Account
         {
             CustomerId = customerId,
-            AccountNumber = accountNumber,
+            AccountNumber = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 12).ToUpper(),
             Type = type,
-            AccountStatus = Status.Active,
-            Balance = 0m,
+            Status = AccountStatus.Active,
+            Balance = Balance,
             CreatedAt = DateTime.UtcNow
         };
         account.AddDomainEvent(new AccountCreatedEvent(
             customerId,
-            accountNumber,
+            account.AccountNumber,
             account.Balance
         ));
         return Result<Account>.Success(account);
@@ -36,7 +36,7 @@ public class Account : AggregateRoot
         if(amount <= 0)
         return Result.Failure("Deposit amount must be greater than zero");
 
-        if(AccountStatus != Status.Active)
+        if(Status != AccountStatus.Active)
         return Result.Failure("Only active accounts can accept deposits.");
 
         Balance += amount;
@@ -48,7 +48,7 @@ public class Account : AggregateRoot
         if(amount <= 0)
         return Result.Failure("Withdrawal amount must be greater than zero");
 
-        if(AccountStatus != Status.Active)
+        if(Status != AccountStatus.Active)
         return Result.Failure("Only active accounts can accept withdrawals.");
 
         if(Balance < amount)
@@ -68,7 +68,7 @@ public enum AccountType
     Checking
 }
 
-public enum Status
+public enum AccountStatus
 {
     Active,
     Inactive,
