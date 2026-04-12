@@ -2,7 +2,6 @@ using MediatR;
 using Application.Interfaces;
 using Domain.Entities;
 using Application.DTOs.Accounts;
-using System.Data.Common;
 
 namespace Application.UseCase.Accounts.Commands.UpdateAccountStatus;
 

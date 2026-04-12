@@ -22,6 +22,10 @@ public class AccountRepository : IAccountRepository
     {
         return await _context.Accounts.FirstOrDefaultAsync(a => a.AccountNumber == accountNumber);
     }
+    public async Task<Account?> GetByCustomerIdAsync(long customerId)
+    {
+        return await _context.Accounts.FirstOrDefaultAsync(a => a.CustomerId == customerId);
+    }
     public async Task AddAsync(Account account)
     {
         await _context.Accounts.AddAsync(account);
