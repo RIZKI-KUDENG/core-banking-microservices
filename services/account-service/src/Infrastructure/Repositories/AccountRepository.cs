@@ -14,7 +14,7 @@ public class AccountRepository : IAccountRepository
         _context = context;
     }
 
-    public async Task<Account?>GetByIdAsync(long id)
+    public async Task<Account?> GetByIdAsync(long id)
     {
         return await _context.Accounts.FindAsync(id);
     }

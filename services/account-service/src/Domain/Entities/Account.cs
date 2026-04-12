@@ -59,6 +59,16 @@ public class Account : AggregateRoot
         return Result.Success();
     }
 
+    public Result UpdateStatus(AccountStatus newStatus)
+    {
+        if(Status == newStatus)
+        return Result.Failure("Account is already in the desired status.");
+
+        Status = newStatus;
+        UpdatedAt = DateTime.UtcNow;
+        return Result.Success();
+    }
+
 
 }
 
